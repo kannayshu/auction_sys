@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.FavoriteMapper" >
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.Favorite" >
+    <constructor >
+      <idArg column="fav_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="fav_product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="user_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="is_deleted" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fav_id, fav_product_id, user_id, is_deleted, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from favorite
+    where fav_id = #{favId,jdbcType=BIGINT} AND is_deleted !=1
+  </select>
+  <select id="selectProductIdByUserId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select
+      fav_product_id
+    from favorite
+    where user_id = #{userId,jdbcType=BIGINT} AND is_deleted !=1
+  </select>
+  <select id="countByProductIdUserId" resultType="_int"  >
+    select
+    count(fav_product_id)
+    from favorite
+    where user_id = #{userId,jdbcType=BIGINT}  AND fav_product_id = #{productId,jdbcType=BIGINT} AND is_deleted !=1
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update favorite set is_deleted = 1
+    where fav_id = #{favId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteByUserIdAndProductId" parameterType="java.lang.Long" >
+    update favorite set is_deleted = 1
+    where user_id = #{userId,jdbcType=BIGINT} AND fav_product_id = #{productId,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.Favorite" >
+    insert into favorite (fav_id, fav_product_id, user_id, 
+      is_deleted, gmt_create, gmt_modified
+      )
+    values (#{favId,jdbcType=BIGINT}, #{favProductId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      0, NOW(),  NOW()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.Favorite" >
+    insert into favorite
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="favId != null" >
+        fav_id,
+      </if>
+      <if test="favProductId != null" >
+        fav_product_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="favId != null" >
+        #{favId,jdbcType=BIGINT},
+      </if>
+      <if test="favProductId != null" >
+        #{favProductId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null" >
+        NOW(),
+      </if>
+      <if test="gmtModified != null" >
+        NOW(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.Favorite" >
+    update favorite
+    <set >
+      <if test="favProductId != null" >
+        fav_product_id = #{favProductId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+        gmt_modified =  NOW(),
+
+    </set>
+    where fav_id = #{favId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.Favorite" >
+    update favorite
+    set fav_product_id = #{favProductId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      gmt_modified =  NOW()
+    where fav_id = #{favId,jdbcType=BIGINT}
+  </update>
+</mapper>

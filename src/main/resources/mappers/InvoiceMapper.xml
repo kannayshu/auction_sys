@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.InvoiceMapper" >
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.Invoice" >
+    <constructor >
+      <idArg column="invoice_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="product_order_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="receiver_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="shipping_address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="receiver_zip" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="receiver_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="logistics_number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="logistics_company" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="is_deleted" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    invoice_id, product_order_id, receiver_phone, shipping_address, receiver_zip, receiver_name,
+    logistics_number, logistics_company, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from invoice
+    where invoice_id = #{invoiceId,jdbcType=BIGINT} AND id_deleted !=1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from invoice
+    where invoice_id = #{invoiceId,jdbcType=BIGINT}AND id_deleted !=1
+  </delete>
+  <insert id="insert" parameterType="com.auction_sys.pojo.Invoice" >
+    insert into invoice (invoice_id, product_order_id, receiver_phone,
+      shipping_address, receiver_zip, receiver_name, 
+      logistics_number, logistics_company,
+      is_deleted, gmt_create, gmt_modified
+      )
+    values (#{invoiceId,jdbcType=BIGINT}, #{productOrderId,jdbcType=BIGINT}, #{receiverPhone,jdbcType=VARCHAR},
+      #{shippingAddress,jdbcType=VARCHAR}, #{receiverZip,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR},
+      #{logisticsNumber,jdbcType=VARCHAR}, #{logisticsCompany,jdbcType=VARCHAR},
+      0,NOW(),NOW()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.Invoice" >
+    insert into invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="invoiceId != null" >
+        invoice_id,
+      </if>
+      <if test="productOrderId != null" >
+        product_order_id,
+      </if>
+      <if test="receiverPhone != null" >
+        receiver_phone,
+      </if>
+      <if test="shippingAddress != null" >
+        shipping_address,
+      </if>
+      <if test="receiverZip != null" >
+        receiver_zip,
+      </if>
+      <if test="receiverName != null" >
+        receiver_name,
+      </if>
+      <if test="logisticsNumber != null" >
+        logistics_number,
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company,
+      </if>
+
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="invoiceId != null" >
+        #{invoiceId,jdbcType=BIGINT},
+      </if>
+      <if test="productOrderId != null" >
+        #{productOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="receiverPhone != null" >
+        #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingAddress != null" >
+        #{shippingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverZip != null" >
+        #{receiverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null" >
+        #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNumber != null" >
+        #{logisticsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompany != null" >
+        #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+        NOW(),
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.Invoice" >
+    update invoice
+    <set >
+      <if test="productOrderId != null" >
+        product_order_id = #{productOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="receiverPhone != null" >
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingAddress != null" >
+        shipping_address = #{shippingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverZip != null" >
+        receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null" >
+        receiver_name = #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNumber != null" >
+        logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = NOW(),
+      </if>
+    </set>
+    where invoice_id = #{invoiceId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.Invoice" >
+    update invoice
+    set product_order_id = #{productOrderId,jdbcType=BIGINT},
+      receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      shipping_address = #{shippingAddress,jdbcType=VARCHAR},
+      receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+      receiver_name = #{receiverName,jdbcType=VARCHAR},
+      logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+      logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      gmt_modified = NOW()
+    where invoice_id = #{invoiceId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByOrderIdSelective"  >
+    update invoice
+    <set >
+
+      <if test="receiverPhone != null" >
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingAddress != null" >
+        shipping_address = #{shippingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverZip != null" >
+        receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null" >
+        receiver_name = #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNumber != null" >
+        logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+        gmt_modified = NOW(),
+    </set>
+    where product_order_id = #{productOrderId,jdbcType=BIGINT}
+  </update>
+</mapper>

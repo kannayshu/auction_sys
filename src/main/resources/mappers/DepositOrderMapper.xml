@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.DepositOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.DepositOrder" >
+    <constructor >
+      <idArg column="deposit_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="payer_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="payment" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="payment_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_payment" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_close" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_end" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_deadline" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    deposit_id, type,product_id, payer_id, payment, payment_type, gmt_payment, status, gmt_close,
+    gmt_end, gmt_deadline,gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from deposit_order
+    where deposit_id = #{depositId,jdbcType=BIGINT} AND is_deleted != 1;
+  </select>
+  <update id="deleteByProductIdAndType"  >
+    UPDATE deposit_order SET is_deleted = 1
+    where product_id = #{productId,jdbcType=BIGINT} AND type = #{type,jdbcType=TINYINT}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.DepositOrder" useGeneratedKeys="true" keyProperty="depositId" >
+    insert into deposit_order (deposit_id,type, product_id, payer_id,
+      payment, payment_type, gmt_payment,
+      status, gmt_close, gmt_end, gmt_deadline,
+      gmt_create, gmt_modified,is_deleted)
+    values (#{depositId,jdbcType=BIGINT},  #{type,jdbcType=TINYINT}, #{productId,jdbcType=BIGINT}, #{payerId,jdbcType=BIGINT},
+      #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=TINYINT}, #{gmtPayment,jdbcType=TIMESTAMP},
+      #{status,jdbcType=TINYINT}, #{gmtClose,jdbcType=TIMESTAMP}, #{gmtEnd,jdbcType=TIMESTAMP}, #{gmtDeadline,jdbcType=TIMESTAMP},
+     now(), now(),0)
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.DepositOrder" >
+    insert into deposit_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="depositId != null" >
+        deposit_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="payerId != null" >
+        payer_id,
+      </if>
+      <if test="payment != null" >
+        payment,
+      </if>
+      <if test="paymentType != null" >
+        payment_type,
+      </if>
+      <if test="gmtPayment != null" >
+        gmt_payment,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="gmtClose != null" >
+        gmt_close,
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end,
+      </if>
+      <if test="gmtDeadline != null" >
+        gmt_deadline,
+      </if>
+        gmt_create,
+        gmt_modified,
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="depositId != null" >
+      #{depositId,jdbcType=BIGINT},
+    </if>
+      <if test="type != null" >
+      #{type,jdbcType=TINYINT},
+    </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="payerId != null" >
+        #{payerId,jdbcType=BIGINT},
+      </if>
+      <if test="payment != null" >
+        #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentType != null" >
+        #{paymentType,jdbcType=TINYINT},
+      </if>
+      <if test="gmtPayment != null" >
+        #{gmtPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtClose != null" >
+        #{gmtClose,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtDeadline != null" >
+        #{gmtDeadline,jdbcType=TIMESTAMP},
+      </if>
+        now(),
+        now(),
+      <if test="isDeleted != null" >
+        0,
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.DepositOrder" >
+    update deposit_order
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="payerId != null" >
+        payer_id = #{payerId,jdbcType=BIGINT},
+      </if>
+      <if test="payment != null" >
+        payment = #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentType != null" >
+        payment_type = #{paymentType,jdbcType=TINYINT},
+      </if>
+      <if test="gmtPayment != null" >
+        gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtClose != null" >
+        gmt_close = #{gmtClose,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtDeadline != null" >
+        gmt_deadline = #{gmtDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = now(),
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where deposit_id = #{depositId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.DepositOrder" >
+    update deposit_order
+    set product_id = #{productId,jdbcType=BIGINT},
+      type = #{type,jdbcType=TINYINT},
+      payer_id = #{payerId,jdbcType=BIGINT},
+      payment = #{payment,jdbcType=DECIMAL},
+      payment_type = #{paymentType,jdbcType=TINYINT},
+      gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      gmt_close = #{gmtClose,jdbcType=TIMESTAMP},
+      gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      gmt_deadline = #{gmtDeadline,jdbcType=TIMESTAMP},
+      gmt_modified =now()
+    where deposit_id = #{depositId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByUserIdAndDepositId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from deposit_order
+    where payer_id =#{payerId,jdbcType=BIGINT} AND deposit_id = #{depositId,jdbcType=BIGINT} AND is_deleted != 1;
+
+  </select>
+
+  <select id="getStatusByPrimaryKeyAndUserId" resultType="java.lang.Byte">
+    select
+    status
+    from deposit_order
+    where payer_id =#{payerId,jdbcType=BIGINT} AND deposit_id = #{depositId,jdbcType=BIGINT} AND is_deleted != 1;
+
+  </select>
+  <select id="selectDepositIdByProductIdAndStatusAndType" resultType="java.lang.Long">
+  select
+  deposit_id
+  from deposit_order
+  where product_id = #{productId,jdbcType=BIGINT} AND status = #{status,jdbcType=TINYINT} AND type = #{type,jdbcType=TINYINT}
+
+</select>
+  <select id="selectDepositIdByGmtdeadlineAndStatus" resultType="java.lang.Long">
+    select
+    deposit_id
+    from deposit_order
+    where status = #{status,jdbcType = BIGINT} AND gmt_deadline &lt;=now() AND is_deleted !=1
+  </select>
+  <update id="updateStatusByDepositId"  >
+    update deposit_order
+    set status = #{status,jdbcType=TINYINT},
+    gmt_modified = now()
+    where deposit_id = #{depositId,jdbcType = BIGINT}
+  </update>
+  <update id="updateStatusByDepositIdAndStatus"  >
+    update deposit_order
+    set status = #{status1,jdbcType=TINYINT},
+    gmt_modified = now()
+    where status = #{status2,jdbcType = TINYINT} AND deposit_id = #{depositId,jdbcType = BIGINT}
+  </update>
+  <select id="selectDepositByPayerIdAndTypeAndProductId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from deposit_order
+    where payer_id = #{payerId,jdbcType = BIGINT} AND product_id = #{productId,jdbcType = BIGINT} AND type = #{type,jdbcType=TINYINT} AND is_deleted !=1
+  </select>
+  <select id="selectDepositIdByPayerIdAndTypeAndProductId" resultType="java.lang.Long">
+    select
+   deposit_id
+    from deposit_order
+    where payer_id = #{payerId,jdbcType = BIGINT} AND product_id = #{productId,jdbcType = BIGINT} AND type = #{type,jdbcType=TINYINT} AND is_deleted !=1
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    UPDATE deposit_order SET is_deleted = 1
+    where deposit_id = #{depositId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auction_sys.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.User">
+    <constructor>
+      <idArg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="role" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, role, username, password, email, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyProperty="userId" parameterType="com.auction_sys.pojo.User" useGeneratedKeys="true">
+    insert into user (user_id, role, username, 
+      password, email, status,
+      gmt_create, gmt_modified)
+    values (#{userId,jdbcType=BIGINT}, #{role,jdbcType=TINYINT}, #{username,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      now(),  now())
+  </insert>
+  <insert id="insertSelective" keyProperty="userId" parameterType="com.auction_sys.pojo.User" useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="role != null">
+        role,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=TINYINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+        now(),
+        now(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.User">
+    update user
+    <set>
+      <if test="role != null">
+        role = #{role,jdbcType=TINYINT},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      gmt_modified =  now(),
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.User">
+    update user
+    set role = #{role,jdbcType=TINYINT},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      gmt_modified = now()
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+    <select id="checkUsername" parameterType="string" resultType="int">
+        select count(1) from user
+        where username = #{username}
+    </select>
+
+    <select id="checkEmail" parameterType="string" resultType="int">
+        select count(1) from user
+        where email = #{email}
+    </select>
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where username = #{username}
+    </select>
+    <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where  email = #{email}
+    </select>
+  <update id="updatePasswordByEmail" >
+    update user
+    set password = #{password,jdbcType=VARCHAR},
+    gmt_modified = now()
+    where   email = #{email,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updatePasswordByUserId" >
+    update user
+    set password = #{password,jdbcType=VARCHAR},
+    gmt_modified = now()
+    where   user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

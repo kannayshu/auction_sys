@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.ProductMapper" >
+  <resultMap id="SellerAndStatus" type="com.auction_sys.pojo.Product" >
+    <constructor >
+      <arg column="seller_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+
+    </constructor>
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.Product" >
+    <constructor >
+      <idArg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="school_id" jdbcType="INTEGER" javaType="java.lang.Integer"  />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sub_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+        <arg column="gmt_deadline" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="seller_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="scale" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+        <arg column="cash_deposit" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="starting_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="current_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="reserve_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="BaseResultMapWithBlogs" type="com.auction_sys.pojo.Product" >
+    <constructor >
+      <idArg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="school_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sub_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+        <arg column="gmt_deadline" jdbcType="INTEGER" javaType="java.util.Date" />
+      <arg column="seller_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="scale" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+        <arg column="cash_deposit" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="starting_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="current_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="reserve_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+    <resultMap id="SimpleResultForList" type="com.auction_sys.pojo.Product" >
+        <constructor >
+            <idArg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+             <arg column="school_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sub_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="gmt_deadline" jdbcType="INTEGER" javaType="java.util.Date" />
+            <arg column="cash_deposit" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+            <arg column="starting_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+            <arg column="current_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+            <arg column="reserve_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+            <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sub_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+        </constructor>
+    </resultMap>
+  <sql id="Base_Column_List" >
+    product_id, school_id, name, sub_title, category_id,gmt_deadline, seller_id, scale, cash_deposit,starting_price, current_price,
+    reserve_price, main_image, sub_image,status, gmt_create, gmt_modified
+  </sql>
+  <sql id="WithBlogs" >
+   detail
+  </sql>
+    <sql id="SimpleResultForList">
+      product_id,school_id, name, sub_title, category_id,gmt_deadline,cash_deposit,starting_price, current_price,
+        reserve_price, main_image, sub_image,status
+    </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />,<include refid="WithBlogs" />
+    from product
+    where product_id = #{product_id,jdbcType=BIGINT} and is_deleted!=1
+</select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    UPDATE product set is_deleted =1
+    where product_id = #{product_id,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.Product" >
+    insert into product (product_id,school_id, name, sub_title,
+      category_id,gmt_deadline, seller_id, scale, cash_deposit,
+      starting_price, current_price, reserve_price, 
+      main_image, sub_image, detail, 
+      status, is_deleted, gmt_create, 
+      gmt_modified)
+    values (#{productId,jdbcType=BIGINT},#{schoolId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR},
+      #{categoryId,jdbcType=INTEGER}, #{gmtDeadline,jdbcType=TIMESTAMP},  #{sellerId,jdbcType=BIGINT}, #{scale,jdbcType=DECIMAL}, #{cashDeposit,jdbcType=DECIMAL},
+      #{startingPrice,jdbcType=DECIMAL}, #{currentPrice,jdbcType=DECIMAL}, #{reservePrice,jdbcType=DECIMAL},
+      #{mainImage,jdbcType=VARCHAR}, #{subImage,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, 0, now(),
+            now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.Product" useGeneratedKeys="true" keyProperty="id" >
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="schoolId != null" >
+        school_id,
+      </if>
+
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="subTitle != null" >
+        sub_title,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+        <if test="gmtDeadline != null" >
+          gmt_deadline,
+        </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+
+      <if test="scale != null" >
+        scale,
+      </if>
+        <if test="cashDeposit != null" >
+            scale,
+        </if>
+      <if test="startingPrice != null" >
+        starting_price,
+      </if>
+      <if test="currentPrice != null" >
+        current_price,
+      </if>
+      <if test="reservePrice != null" >
+        reserve_price,
+      </if>
+      <if test="mainImage != null" >
+        main_image,
+      </if>
+      <if test="subImage != null" >
+        sub_image,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+      #{productId,jdbcType=BIGINT},
+    </if>
+      <if test="schoolId != null" >
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null" >
+        #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+        <if test="gmtDeadline != null" >
+            #{gmtDeadline,jdbcType=TIMESTAMP},
+        </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=DECIMAL},
+      </if>
+        <if test="cashDeposit != null" >
+            #{cashDeposit,jdbcType=DECIMAL},
+        </if>
+      <if test="startingPrice != null" >
+        #{startingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currentPrice != null" >
+        #{currentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reservePrice != null" >
+        #{reservePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="mainImage != null" >
+        #{mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="subImage != null" >
+        #{subImage,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null" >
+        0,
+      </if>
+          now(),
+        now(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective"  useGeneratedKeys="true" keyProperty="product_id">
+    update product
+    <set >
+      <if test="product.schoolId != null" >
+       school_id = #{product.schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="product.name != null" >
+        name = #{product.name,jdbcType=VARCHAR},
+      </if>
+      <if test="product.subTitle != null" >
+        sub_title = #{product.subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="product.categoryId != null" >
+        category_id = #{product.categoryId,jdbcType=INTEGER},
+      </if>
+        <if test="product.gmtDeadline != null" >
+          gmt_deadline = #{product.gmtDeadline,jdbcType=TIMESTAMP},
+        </if>
+      <if test="product.scale != null" >
+        scale = #{product.scale,jdbcType=DECIMAL},
+      </if>
+        <if test="product.cashDeposit != null" >
+            cash_deposit = #{product.cashDeposit,jdbcType=DECIMAL},,
+        </if>
+        <if test="product.startingPrice != null" >
+        starting_price = #{product.startingPrice,jdbcType=DECIMAL},
+       </if>
+      <if test="product.currentPrice != null" >
+        current_price = #{product.currentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="product.reservePrice != null" >
+        reserve_price = #{product.reservePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="product.mainImage != null" >
+        main_image = #{product.mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="product.subImage != null" >
+        sub_image = #{product.subImage,jdbcType=VARCHAR},
+      </if>
+      <if test="product.detail != null" >
+        detail = #{product.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="product.status != null" >
+        status = #{product.status,jdbcType=TINYINT},
+      </if>
+        <if test="product.isDeleted != null" >
+            is_deleted = #{product.is_deleted,jdbcType=TINYINT},
+        </if>
+        gmt_modified = now(),
+    </set>
+    where product_id = #{product.productId,jdbcType=BIGINT}
+  </update>
+ <select id="listResult" resultMap="SimpleResultForList"  >
+        select
+        <include refid="SimpleResultForList" />
+        from product
+        where is_deleted!=1
+    </select>
+  <select id="listResultByCategory" resultMap="SimpleResultForList"  parameterType="_int">
+        select
+        <include refid="SimpleResultForList" />
+        from product
+        where category_id = #{categoryId,jdbcType=BIGINT} and is_deleted!=1
+  </select>
+
+  <select id="listResultBySellerId" resultMap="SimpleResultForList"  parameterType="java.lang.Long">
+    select
+    <include refid="SimpleResultForList" />
+    from product
+    where seller_id = #{sellerId,jdbcType=BIGINT} and is_deleted!=1
+  </select>
+
+  <select id="searchSelective" resultMap="SimpleResultForList"  parameterType="com.auction_sys.pojo.Product"  >
+    select
+    <include refid="SimpleResultForList" />
+    from product
+    where is_deleted!=1 AND ( name LIKE #{name,jdbcType=VARCHAR} OR sub_title LIKE #{subTitle,jdbcType=VARCHAR})
+    <if test="categoryId != null" >
+      AND category_id = #{categoryId,jdbcType=INTEGER}
+    </if>
+    <if test="status != null" >
+      AND status = #{status,jdbcType=TINYINT}
+    </if>
+
+  </select>
+  <select id="selectDeadlineIdByStatus" resultType="java.lang.Long"  parameterType="java.lang.Byte"  >
+    select product_id
+    from product
+    where is_deleted!=1 AND gmt_deadline  &lt;= now() AND status = #{status,jdbcType=TINYINT}
+  </select>
+    <select id="selectSimpleResultByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  select
+  <include refid="Base_Column_List" />
+  from product
+  where product_id = #{productId,jdbcType=BIGINT} and is_deleted!=1
+</select>
+  <update id="updateStatusByPrimaryKey" >
+    update product
+    set status = #{status,jdbcType=TINYINT},
+    gmt_modified = now()
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateStatusByPrimaryKeyAndUserId"  >
+    update product
+    set status = #{status1,jdbcType=TINYINT},
+    gmt_modified = now()
+    where status = #{status2,jdbcType = TINYINT} AND product_id = #{productId,jdbcType = BIGINT} AND seller_id = #{userId,jdbcType = BIGINT}
+  </update>
+  <select id="selectSellerIdByPrimaryKey" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select
+    seller_id
+    from product
+    where product_id = #{productId,jdbcType=BIGINT} and is_deleted!=1
+
+  </select>
+  <select id="sellectSellerIdAndStatusByPrimaryKey" resultMap="SellerAndStatus" parameterType="java.lang.Long" >
+    select
+    seller_id,status
+    from product
+    where product_id = #{productId,jdbcType=BIGINT} and is_deleted!=1
+  </select>
+  <update id="updateCurrentPriceByProductId" parameterType="java.lang.Long" >
+    UPDATE product SET current_price = #{currentPrice,jdbcType=DECIMAL}
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auction_sys.dao.PayInfoMapper">
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.PayInfo">
+    <constructor>
+      <idArg column="pay_info_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="buyer_logon_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="order_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="pay_platform" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="platform_number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="platform_status" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    pay_info_id, user_id, buyer_logon_id,order_id, pay_platform, platform_number, platform_status, type,
+    is_deleted, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pay_info
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    UPDATE pay_info SET is_deleted = 1
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.PayInfo">
+    insert into pay_info (pay_info_id, user_id, buyer_logon_id,order_id,
+      pay_platform, platform_number, platform_status, 
+      type,gmt_create,
+      gmt_modified)
+    values (#{payInfoId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{buyerLogonId,jdbcType=VARCHAR} ,#{orderId,jdbcType=BIGINT},
+      #{payPlatform,jdbcType=TINYINT}, #{platformNumber,jdbcType=VARCHAR}, #{platformStatus,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, NOW(),
+            NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.PayInfo">
+    insert into pay_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="payInfoId != null">
+        pay_info_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="buyerLogonId != null">
+        buyer_logon_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="payPlatform != null">
+        pay_platform,
+      </if>
+      <if test="platformNumber != null">
+        platform_number,
+      </if>
+      <if test="platformStatus != null">
+        platform_status,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="payInfoId != null">
+        #{payInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="buyerLogonId != null">
+        #{buyerLogonId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="payPlatform != null">
+        #{payPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="platformNumber != null">
+        #{platformNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="platformStatus != null">
+        #{platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+        NOW(),
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.PayInfo">
+    update pay_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="buyerLogonId != null">
+        buyer_logon_id = #{buyerLogonId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="payPlatform != null">
+        pay_platform = #{payPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="platformNumber != null">
+        platform_number = #{platformNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="platformStatus != null">
+        platform_status = #{platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+        gmt_modified =NOW()
+    </set>
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.PayInfo">
+    update pay_info
+    set user_id = #{userId,jdbcType=BIGINT},
+      order_id = #{orderId,jdbcType=BIGINT},
+      buyer_logon_id = #{buyerLogonId,jdbcType=VARCHAR},
+      pay_platform = #{payPlatform,jdbcType=TINYINT},
+      platform_number = #{platformNumber,jdbcType=VARCHAR},
+      platform_status = #{platformStatus,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      gmt_modified = NOW()
+    where pay_info_id = #{payInfoId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByOrderIdSelective" parameterType="com.auction_sys.pojo.PayInfo">
+    update pay_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="buyerLogonId != null">
+        buyer_logon_id = #{buyerLogonId,jdbcType=VARCHAR},
+      </if>
+      <if test="payPlatform != null">
+        pay_platform = #{payPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="platformNumber != null">
+        platform_number = #{platformNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="platformStatus != null">
+        platform_status = #{platformStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      gmt_modified =NOW()
+    </set>
+    where order_id = #{orderId,jdbcType=BIGINT} AND is_deleted !=1
+  </update>
+  <select id="selectBuyerLogonIdByOrderId" parameterType="java.lang.Long" resultType="java.lang.String">
+    select
+      buyer_logon_id
+    from pay_info
+    where order_id = #{orderId,jdbcType=BIGINT} AND is_deleted !=1
+  </select>
+</mapper>

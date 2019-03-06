@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.Category" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parent_id, name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from category
+    where id = #{id,jdbcType=INTEGER} AND is_deleted !=1
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    update category set is_deleted = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.Category" keyProperty="id" useGeneratedKeys="true">
+    insert into category (id, parent_id, name, 
+      is_deleted, gmt_create, gmt_modified
+      )
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+     0,now(),now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.Category"  keyProperty="id" useGeneratedKeys="true">
+    insert into category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="isDeleted != null" >
+        0,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+      0,
+      </if>
+        now(),
+        now(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.Category" >
+    update category
+    <set >
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.Category" >
+    update category
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      gmt_modified = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByParentId" resultMap="BaseResultMap" parameterType="list">
+    select <include refid="Base_Column_List" />
+    FROM category
+    where parent_id = #{parentId,jdbcType=INTEGER} AND is_deleted !=1
+  </select>
+</mapper>

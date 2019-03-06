@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auction_sys.dao.InnerOrderMapper">
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.InnerOrder">
+    <constructor>
+      <idArg column="inner_order_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="product_order_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="payment" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_deleted" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    inner_order_id, product_order_id, payment, remark, is_deleted, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inner_order
+    where inner_order_id = #{innerOrderId,jdbcType=BIGINT}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update inner_order set is_deleted = 1
+    where inner_order_id = #{innerOrderId,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="com.auction_sys.pojo.InnerOrder">
+    insert into inner_order (inner_order_id, product_order_id, payment, 
+      remark, is_deleted, gmt_create, 
+      gmt_modified)
+    values (#{innerOrderId,jdbcType=BIGINT}, #{productOrderId,jdbcType=BIGINT}, #{payment,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, 0, NOW(),
+            NOW())
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.InnerOrder">
+    insert into inner_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="innerOrderId != null">
+        inner_order_id,
+      </if>
+      <if test="productOrderId != null">
+        product_order_id,
+      </if>
+      <if test="payment != null">
+        payment,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+        is_deleted,
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="innerOrderId != null">
+        #{innerOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="productOrderId != null">
+        #{productOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="payment != null">
+        #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+        0,
+        NOW(),
+        NOW(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.InnerOrder">
+    update inner_order
+    <set>
+      <if test="productOrderId != null">
+        product_order_id = #{productOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="payment != null">
+        payment = #{payment,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified =  NOW(),
+      </if>
+    </set>
+    where inner_order_id = #{innerOrderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.InnerOrder">
+    update inner_order
+    set product_order_id = #{productOrderId,jdbcType=BIGINT},
+      payment = #{payment,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      gmt_modified = NOW()
+    where inner_order_id = #{innerOrderId,jdbcType=BIGINT}
+  </update>
+</mapper>

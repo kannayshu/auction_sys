@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.auction_sys.dao.ChanceMapper" >
+  <resultMap id="BaseResultMap" type="com.auction_sys.pojo.Chance" >
+    <constructor >
+      <idArg column="chance_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="bidder_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="chance_time" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="gmt_create" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="gmt_modified" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    chance_id, product_id, bidder_id, chance_time, status, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from chance
+    where chance_id = #{chanceId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from chance
+    where chance_id = #{chanceId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.auction_sys.pojo.Chance" >
+    insert into chance (chance_id, product_id, bidder_id, 
+      chance_time, status, gmt_create, 
+      gmt_modified)
+    values (#{chanceId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{bidderId,jdbcType=BIGINT}, 
+      #{chanceTime,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.auction_sys.pojo.Chance" >
+    insert into chance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="chanceId != null" >
+        chance_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="bidderId != null" >
+        bidder_id,
+      </if>
+      <if test="chanceTime != null" >
+        chance_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+        gmt_create,
+        gmt_modified,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="chanceId != null" >
+        #{chanceId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="bidderId != null" >
+        #{bidderId,jdbcType=BIGINT},
+      </if>
+      <if test="chanceTime != null" >
+        #{chanceTime,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+        #{gmtCreate,jdbcType=TIMESTAMP},
+        #{gmtModified,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.auction_sys.pojo.Chance" >
+    update chance
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="bidderId != null" >
+        bidder_id = #{bidderId,jdbcType=BIGINT},
+      </if>
+      <if test="chanceTime != null" >
+        chance_time = #{chanceTime,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where chance_id = #{chanceId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.auction_sys.pojo.Chance" >
+    update chance
+    set product_id = #{productId,jdbcType=BIGINT},
+      bidder_id = #{bidderId,jdbcType=BIGINT},
+      chance_time = #{chanceTime,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where chance_id = #{chanceId,jdbcType=BIGINT}
+  </update>
+</mapper>
